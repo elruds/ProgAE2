@@ -22,6 +22,7 @@ public class CipherGUI extends JFrame implements ActionListener
 	//some way of indicating whether encoding or decoding is to be done
 	private MonoCipher mcipher;
 	private VCipher vcipher;
+	private String fileName;
 	
 	/**
 	 * The constructor adds all the components to the frame
@@ -81,28 +82,28 @@ public class CipherGUI extends JFrame implements ActionListener
 	 */
 	public void actionPerformed(ActionEvent e)
 	{	
+		this.getKeyword();
+		this.processFileName();
+		
 		if (e.getSource() == monoButton) {
-			boolean vigenere = false;
-			getKeyword();
-			processFileName();
+			processFile(false);
 	}	
 		
 		else if (e.getSource() == vigenereButton) {
-			boolean vigenere = true;
-			getKeyword();
-			processFileName();
+			processFile(true);
 		}
 	}	
 		
-	public boolean isUnique(String input) {
-	     boolean[] charArray = new boolean[100];
-	     for (int i = 0; i < input.length(); i++) {
-	         int c = input.charAt(i);
+	public boolean isUnique(String key) {
+	     boolean[] charArray = new boolean[100]; //creates array of booleans long enough to 
+	     for (int i = 0; i < key.length(); i++) {	//accommodate letters A-Z initialised to
+	         int c = key.charAt(i);					//false
 	         if (charArray[c]) {
-	             return false;
+	             return false;		
 	         }
-	         charArray[c] = true;
-	     }
+	         charArray[c] = true;	//set value to true if keyword contains letter 
+	     }							//with value corresponding to index of charArray
+	     
 	     return true;
 	}
 	
@@ -147,7 +148,7 @@ public class CipherGUI extends JFrame implements ActionListener
 	 */
 	private boolean processFileName()
 	{
-		String fileName = messageField.getText();
+		fileName = messageField.getText();
 		int fileNameLen = fileName.length();
 		
 		if (fileName.charAt(fileNameLen-1) == 'P' || (fileName.charAt(fileNameLen-1) == 'C' )) {
@@ -177,14 +178,13 @@ public class CipherGUI extends JFrame implements ActionListener
 	 */
 	private boolean processFile(boolean vigenere)
 	{	
-		String inputFileName = "/Users/Lauren/MScSoftwareDev/Programming/text1P.txt";
 		
 		FileReader reader = null;
 		
 			try {
 				try {
 			
-			reader = new FileReader(inputFileName);
+			reader = new FileReader(fileName + ".txt");
 			int fileChar;
 			while ((fileChar = reader.read()) != -1) {
 							

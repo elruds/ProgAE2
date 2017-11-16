@@ -15,8 +15,8 @@ public class AssEx2
 	 */
 	public static void main(String [] args)
 	{
-//		CipherGUI CipherGUI = new CipherGUI();
-//		CipherGUI.setVisible(true);
+		CipherGUI CipherGUI = new CipherGUI();
+		CipherGUI.setVisible(true);
 
 	}
 }
