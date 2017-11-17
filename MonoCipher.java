@@ -21,27 +21,28 @@ public class MonoCipher
 	 * Instantiates a new mono cipher.
 	 * @param keyword the cipher keyword
 	 */
+	
+	
 	public MonoCipher(String keyword)
-	{
+	{					
 		//create alphabet
 		alphabet = new char [SIZE];
 		for (int i = 0; i < SIZE; i++)
-			alphabet[i] = (char)('A' + i);
-		
-		int keywordSize = keyword.length();		
+			alphabet[i] = (char)('A' + i);		
 				
 		cipher = new char [SIZE];
 		
-			
-			for (int k = 0; k < keywordSize; k++) { 						
+			int k;
+		
+			for (k = 0; k < keyword.length(); k++) { 						
 								
 			cipher[k] = keyword.charAt(k); 	//while index of cipher array less than 	
 			}								//length of keyword, assign letters 
 											//in keyword to cipher elements
 			int i = 0;
-			int k = 0;
+			
 			for (i = SIZE-1; i > -1; i--) {		//iterate through alphabet in reverse
-				for (k = keywordSize; k < SIZE; k++)	{ //iterate through keyword
+				for (k = keyword.length(); k < SIZE; k++)	{ //iterate cipher array
 														
 			boolean found = false;																																		
 				if (alphabet[i] == cipher[k]) {
@@ -59,26 +60,6 @@ public class MonoCipher
 			System.out.print(cipher);
 		
 		}
-	
-		
-//		for (int i = keywordSize; i < SIZE; i++)	{ //when cipher array index is greater than length
-//												//of keyword
-//				for(int j = 25; j >= 0; j--) {            //go through alphabet in reverse
-//			
-//			for (int k = 0; k < keywordSize; k++) {      //go through each letter of keyword
-//				
-//				if (keyword.charAt(k) == alphabet[0]) {
-//					cipher[25] = alphabet[0];
-//				}
-//				
-//				else if (alphabet[j] == keyword.charAt(k)){ //if contents of alphabet array are the
-//					cipher[i] = alphabet[j-1];					//same as a letter of keyword
-//				}
-//			
-//			else cipher[i] = alphabet[j];
-//			
-			
-	
 		
 	
 	public char getAlphabet(int i){
@@ -112,8 +93,7 @@ public class MonoCipher
 	{
 	    return ' ';  // replace with your code
 	}
-	
 //	public void setKeyword(String keyWord) {
 //		this.keyword = keyWord;
-	}
-
+//}
+}
