@@ -66,6 +66,7 @@ public class MonoCipher
 		return alphabet[i];
 		
 	}
+	
 			
  		// create first part of cipher from keyword
 		// create remainder of cipher from the remaining characters of the alphabet
@@ -80,8 +81,8 @@ public class MonoCipher
 	public char encode(char ch)
 	{	
 		int index = ch - 'A';
-		
-	    return ' ';  // replace with your code
+				
+	    return cipher[index] ;  // replace with your code
 	}
 
 	/**
@@ -91,7 +92,9 @@ public class MonoCipher
 	 */
 	public char decode(char ch)
 	{
-	    return ' ';  // replace with your code
+		int index = ch - cipher[0];
+		
+	    return alphabet[index];  // replace with your code
 	}
 //	public void setKeyword(String keyWord) {
 //		this.keyword = keyWord;
