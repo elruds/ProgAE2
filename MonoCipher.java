@@ -34,33 +34,34 @@ public class MonoCipher
 		
 			int k;
 		
-			for (k = 0; k < keyword.length(); k++) { 						
-								
-			cipher[k] = keyword.charAt(k); 	//while index of cipher array less than 	
+			for (k = 0; k < keyword.length(); k++) { 										
+				cipher[k] = keyword.charAt(k); 	//while index of cipher array less than 	
 			}								//length of keyword, assign letters 
 											//in keyword to cipher elements
+			
+			boolean[] foundArray = initFoundArray(keyword);
 			int i = 0;
-			
-			for (i = SIZE-1; i > -1; i--) {		//iterate through alphabet in reverse
-				for (k = keyword.length(); k < SIZE; k++)	{ //iterate cipher array
-														
-			boolean found = false;																																		
-				if (alphabet[i] == cipher[k]) {
-					i--;
-					found = true;		//if letter of alphabet has already appeared in 
-										//keyword, skip to next letter of alphabet
-				}	
-					else {
-					cipher[k] = alphabet[i]; //otherwise put alphabet letter in cipher element
-					i--;
-					}
-		}
-			
+			int c = keyword.length();
+			//iterate through alphabet in reverse
+			for (i = SIZE-1; i > -1; i--) {
+				if (!foundArray[alphabet[i]]) {
+					cipher[c] = alphabet[i];
+					c++;
 				}
+			}
 			System.out.print(cipher);
 		
 		}
-		
+	
+	public boolean[] initFoundArray(String key) {
+	     boolean[] charArray = new boolean[100]; //creates array of booleans long enough to 
+	     for (int i = 0; i < key.length(); i++) {	//accommodate letters A-Z initialised to
+	         int c = key.charAt(i);					//false
+	         charArray[c] = true;	//set value to true if keyword contains letter 
+	     }							//with value corresponding to index of charArray
+	     
+	     return charArray;
+	}
 	
 	public char getAlphabet(int i){
 		return alphabet[i];
@@ -81,8 +82,12 @@ public class MonoCipher
 	public char encode(char ch)
 	{	
 		int index = ch - 'A';
+		
+		if (ch < 65 || ch > 91) {
+			return ch;
+		}
 				
-	    return cipher[index] ;  // replace with your code
+	    return cipher[index];  // replace with your code
 	}
 
 	/**
@@ -92,9 +97,12 @@ public class MonoCipher
 	 */
 	public char decode(char ch)
 	{
-		int index = ch - cipher[0];
-		
-	    return alphabet[index];  // replace with your code
+		for (int i = 0; i< SIZE; i++) {
+			if (ch == cipher[i]) {
+				return alphabet[i];
+			}
+		}
+	    return ch;  // replace with your code
 	}
 //	public void setKeyword(String keyWord) {
 //		this.keyword = keyWord;

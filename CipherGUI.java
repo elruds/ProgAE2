@@ -1,4 +1,4 @@
-	import java.awt.*;
+import java.awt.*;
 	import javax.swing.*;
 	import java.awt.event.*;
 	import java.io.*;
@@ -82,18 +82,25 @@
 		 * (use helper methods below)
 		 * @param e the event
 		 */
-		public void actionPerformed(ActionEvent e)
-		{	
+		public void actionPerformed(ActionEvent e) {	
 			if (getKeyword() && processFileName()) {
 			
 			if (e.getSource() == monoButton) {
 				mcipher = new MonoCipher(key);
-				processFile(false);
-		}	
+				boolean isEncoded = processFile(false, fileName + ".txt", "text1C.txt", true);
+				if (isEncoded) {
+					processFile(false, "text1C.txt", "text1D.txt", false);
+				}
+				
+			}	
 			
 			else if (e.getSource() == vigenereButton) {
 				vcipher = new VCipher(key);
-			}	processFile(true);
+				boolean isEncoded = processFile(true, fileName + ".txt", "text1C.txt", true);
+				if (isEncoded) {
+					processFile(true, "text1C.txt", "text1D.txt", false);
+				}
+				}
 			}
 		}	
 		
@@ -127,7 +134,7 @@
 		 */
 		private boolean getKeyword()
 		{
-		  String key = keyField.getText();
+		  key = keyField.getText();
 		  
 		  if (key.isEmpty() || !key.equals(key.toUpperCase()) || !isUnique(key)) {
 			  JOptionPane.showMessageDialog(null, "Please enter a valid keyword",
@@ -179,54 +186,65 @@
 		 * @param vigenere whether the encoding is Vigenere (true) or Mono (false)
 		 * @return whether the I/O operations were successful
 		 */
-		private boolean processFile(boolean vigenere)
+		private boolean processFile(boolean vigenere, String readFileName, String writeFileName, boolean encode)
 		{	
 			
 			FileReader reader = null;
+			PrintWriter writer = null;
 			
+			try {
 				try {
-					try {
 				
-				reader = new FileReader(fileName + ".txt");
+				reader = new FileReader(readFileName);
+				writer = new PrintWriter(writeFileName);
 				int fileChar;
 				while ((fileChar = reader.read()) != -1) {
-								
-					{
 						char letter = ((char)(fileChar));
-						System.out.print(letter);
-
-						if (vigenere == false) {
-							mcipher.encode(letter);
+						char newLetter;
+						if (!vigenere) {
+							if (encode) {
+								newLetter = mcipher.encode(letter);
+							} else {
+								newLetter = mcipher.decode(letter);
+							}
 						}
 						else {
-						vcipher.encode(letter);
-					}
-				}
-					}
-					}
-					finally {
-					if (reader != null) reader.close();
-				}
-				}
-					
-					catch (IOException ioe) {
-						JOptionPane.showMessageDialog(null, "File not found",
-								"Error", JOptionPane.ERROR_MESSAGE);
-						messageField.setText("");
-						return false;
-					}
-			
-					
-					catch (InputMismatchException e) {
-						JOptionPane.showMessageDialog(null, "Invalid file content",
-								"Error", JOptionPane.ERROR_MESSAGE);
-						return false;
+							if (encode) {
+								newLetter = vcipher.encode(letter);
+							} else {
+								newLetter = vcipher.decode(letter);
+							}
+						}
+						writer.print(newLetter);
 					}
 				
-		    return true;  // replace with your code
-		}
+					}
+					finally {
+						
+					if (reader != null) {
+						reader.close();							
+						} 
+					else return false;
+					if (writer != null) {
+						writer.close();
+						}
+					else return false;
+					} 
+					
+			}
+			catch (IOException ioe) {
+				JOptionPane.showMessageDialog(null, "File not found",
+						"Error", JOptionPane.ERROR_MESSAGE);
+				messageField.setText("");
+				return false;
+			}				
+			catch (InputMismatchException e) {
+				JOptionPane.showMessageDialog(null, "Invalid file content",
+						"Error", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			return true;
 	}
-	
-	
-	
 
+		
+	}
