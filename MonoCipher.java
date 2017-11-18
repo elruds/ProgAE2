@@ -63,12 +63,11 @@ public class MonoCipher
 	     return charArray;
 	}
 	
-	public char getAlphabet(int i){
-		return alphabet[i];
+	public char[] getAlphabet(){
+		return alphabet;
 		
 	}
-	
-			
+
  		// create first part of cipher from keyword
 		// create remainder of cipher from the remaining characters of the alphabet
 		// print cipher array for testing and tutors

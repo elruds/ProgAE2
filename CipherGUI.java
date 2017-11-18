@@ -86,20 +86,20 @@ import java.awt.*;
 			if (getKeyword() && processFileName()) {
 			
 			if (e.getSource() == monoButton) {
+				char[] encryption;
+				char[] decryption;
 				mcipher = new MonoCipher(key);
-				boolean isEncoded = processFile(false, fileName + ".txt", "text1C.txt", true);
-				if (isEncoded) {
-					processFile(false, "text1C.txt", "text1D.txt", false);
-				}
+				encryption = processFile(false, fileName + ".txt", "text1C.txt", true);
+				LetterFrequencies encryptionF = new LetterFrequencies(encryption, mcipher.getAlphabet());
+				String report = encryptionF.getReport();
+				decryption = processFile(false, "text1C.txt", "text1D.txt", false);
+				LetterFrequencies decryptionF = new LetterFrequencies(decryption, mcipher.getAlphabet());
 				
 			}	
 			
 			else if (e.getSource() == vigenereButton) {
 				vcipher = new VCipher(key);
-				boolean isEncoded = processFile(true, fileName + ".txt", "text1C.txt", true);
-				if (isEncoded) {
-					processFile(true, "text1C.txt", "text1D.txt", false);
-				}
+
 				}
 			}
 		}	
@@ -186,18 +186,18 @@ import java.awt.*;
 		 * @param vigenere whether the encoding is Vigenere (true) or Mono (false)
 		 * @return whether the I/O operations were successful
 		 */
-		private boolean processFile(boolean vigenere, String readFileName, String writeFileName, boolean encode)
+		private char[] processFile(boolean vigenere, String readFileName, String writeFileName, boolean encode)
 		{	
 			
 			FileReader reader = null;
 			PrintWriter writer = null;
-			
+			char[] result = new char [2000];
 			try {
 				try {
-				
 				reader = new FileReader(readFileName);
 				writer = new PrintWriter(writeFileName);
 				int fileChar;
+				int i = 0;
 				while ((fileChar = reader.read()) != -1) {
 						char letter = ((char)(fileChar));
 						char newLetter;
@@ -216,6 +216,8 @@ import java.awt.*;
 							}
 						}
 						writer.print(newLetter);
+						result[i] = newLetter;
+						i++;
 					}
 				
 					}
@@ -224,11 +226,9 @@ import java.awt.*;
 					if (reader != null) {
 						reader.close();							
 						} 
-					else return false;
 					if (writer != null) {
 						writer.close();
 						}
-					else return false;
 					} 
 					
 			}
@@ -236,15 +236,14 @@ import java.awt.*;
 				JOptionPane.showMessageDialog(null, "File not found",
 						"Error", JOptionPane.ERROR_MESSAGE);
 				messageField.setText("");
-				return false;
 			}				
 			catch (InputMismatchException e) {
 				JOptionPane.showMessageDialog(null, "Invalid file content",
 						"Error", JOptionPane.ERROR_MESSAGE);
-				return false;
 			}
-			return true;
+			return result;
 	}
+
 
 		
 	}

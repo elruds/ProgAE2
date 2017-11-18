@@ -10,6 +10,10 @@ public class LetterFrequencies
 	/** Count for each letter */
 	private int [] alphaCounts;
 	
+	private double  [] alphaPC;
+	
+	private double  [] alphaPCDiff;
+	
 	/** The alphabet */
 	private char [] alphabet; 
 												 	
@@ -20,16 +24,47 @@ public class LetterFrequencies
 
 	/** Character that occurs most frequently */
 	private char maxCh;
-
+	private double maxPC;
+	
 	/** Total number of characters encrypted/decrypted */
 	private int totChars;
 	
 	/**
 	 * Instantiates a new letterFrequencies object.
 	 */
-	public LetterFrequencies()
+	public LetterFrequencies(char[] letters, char[] alphabet)
 	{
-	    // your code
+		
+		totChars = 0;
+		this.alphabet = alphabet;
+		
+		alphaCounts = new int[SIZE];
+		alphaPC = new double[SIZE];
+		alphaPCDiff = new double[SIZE];
+		
+	    for (int i = 0; i < letters.length; i++) { // Iterate each character from the encr/decr result file
+	    		char ch = letters[i]; // get the letter from the array
+	        if (isLetter(ch)) { // Check if it is a letter A-Z
+	        		addChar(ch);
+	        		totChars++;
+	         }
+	     }
+	    
+	    maxPC = 0.0;
+	    for (int k = SIZE - 1; k > -1; k--) { // Iterate each character from the encr/decr result file
+    			int count = alphaCounts[k]; // get the letter from the array
+    			double PC = ((double) count/totChars) * 100.0;
+    			if (PC > maxPC) {
+    				maxPC = PC;
+    				maxCh = alphabet[k];
+    			}
+    			alphaPC[k] = PC;
+    			alphaPCDiff[k] = alphaPC[k] - avgCounts[k];
+	    }
+	}
+	
+	public boolean isLetter(char ch) {
+		return ch > 64 && ch < 91;
 	}
 		
 	/**
@@ -38,16 +73,16 @@ public class LetterFrequencies
 	 */
 	public void addChar(char ch)
 	{
-	    // your code
+		int index = ch - 'A';
+		alphaCounts[index] += 1; // Increase the frequency for the letter
 	}
 	
 	/**
 	 * Gets the maximum frequency
 	 * @return the maximum frequency
 	 */
-	private double getMaxPC()
-        {
-	    return 0.0;  // replace with your code
+	private double getMaxPC() {
+	    return maxPC;  // replace with your code
 	}
 	
 	/**
@@ -56,6 +91,14 @@ public class LetterFrequencies
 	 */
 	public String getReport()
 	{
-	    return "";  // replace with your code
+		String report = "";
+		report = "LETTER ANALYSIS\n";
+		report += String.format("%-5s %-5s %-5s %-5s %-5s\n", "Letter", "Freq", "Freq%", "AvgFreq%", "Diff");
+		for (int i = 0; i < SIZE; i++) {
+			report += String.format("   %-3s %-5s %5.1f %5s %5.1f\n", alphabet[i], alphaCounts[i], alphaPC[i], avgCounts[i], alphaPCDiff[i]);
+		}
+		report += String.format("The most frequent letter is %s at %.2f%s", maxCh, maxPC, "%");
+		
+	    return report;
 	}
 }
