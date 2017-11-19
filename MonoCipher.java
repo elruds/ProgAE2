@@ -25,7 +25,7 @@ public class MonoCipher
 	
 	public MonoCipher(String keyword)
 	{					
-		//create alphabet
+		//creates alphabet
 		alphabet = new char [SIZE];
 		for (int i = 0; i < SIZE; i++)
 			alphabet[i] = (char)('A' + i);		
@@ -34,29 +34,28 @@ public class MonoCipher
 		
 			int k;
 		
-			for (k = 0; k < keyword.length(); k++) { 										
-				cipher[k] = keyword.charAt(k); 	//while index of cipher array less than 	
-			}								//length of keyword, assign letters 
-											//in keyword to cipher elements
+			for (k = 0; k < keyword.length(); k++) { // create first part of cipher from keyword										
+				cipher[k] = keyword.charAt(k); 	
+			}
 			
-			boolean[] foundArray = initFoundArray(keyword);
-			int i = 0;
+			boolean[] foundArray = initFoundArray(keyword); //array of booleans which contains
+			int i = 0;						//true at index positions of letters in keyword
 			int c = keyword.length();
-			//iterate through alphabet in reverse
-			for (i = SIZE-1; i > -1; i--) {
+			
+			for (i = SIZE-1; i > -1; i--) {		//iterate through alphabet in reverse 
 				if (!foundArray[alphabet[i]]) {
 					cipher[c] = alphabet[i];
-					c++;
+					c++;						   //if letter not in keyword, put it in cipher array
 				}
 			}
-			System.out.print(cipher);
+			System.out.print(cipher); // print cipher array for testing and tutors
 		
 		}
 	
 	public boolean[] initFoundArray(String key) {
-	     boolean[] charArray = new boolean[100]; //creates array of booleans long enough to 
-	     for (int i = 0; i < key.length(); i++) {	//accommodate letters A-Z initialised to
-	         int c = key.charAt(i);					//false
+	     boolean[] charArray = new boolean[100];    //creates array of booleans long enough to 
+	     for (int i = 0; i < key.length(); i++) {   //accommodate letters A-Z initialised to false
+	         int c = key.charAt(i);					
 	         charArray[c] = true;	//set value to true if keyword contains letter 
 	     }							//with value corresponding to index of charArray
 	     
@@ -67,12 +66,6 @@ public class MonoCipher
 		return alphabet;
 		
 	}
-
- 		// create first part of cipher from keyword
-		// create remainder of cipher from the remaining characters of the alphabet
-		// print cipher array for testing and tutors
-	
-	
 	/**
 	 * Encode a character
 	 * @param ch the character to be encoded
@@ -80,13 +73,13 @@ public class MonoCipher
 	 */
 	public char encode(char ch)
 	{	
-		int index = ch - 'A';
+		int index = ch - 'A';		
 		
-		if (ch < 65 || ch > 91) {
-			return ch;
+		if (ch < 65 || ch > 91) { //if character not a letter A-Z e.g. space, number
+			return ch;			//do not encode
 		}
 				
-	    return cipher[index];  // replace with your code
+	    return cipher[index];  
 	}
 
 	/**
@@ -97,13 +90,10 @@ public class MonoCipher
 	public char decode(char ch)
 	{
 		for (int i = 0; i< SIZE; i++) {
-			if (ch == cipher[i]) {
+			if (ch == cipher[i]) {	
 				return alphabet[i];
 			}
 		}
-	    return ch;  // replace with your code
+	    return ch;  //if character not in cipher array, do not decode
 	}
-//	public void setKeyword(String keyWord) {
-//		this.keyword = keyWord;
-//}
 }

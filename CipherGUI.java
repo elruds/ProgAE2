@@ -23,7 +23,7 @@ import java.awt.*;
 		//some way of indicating whether encoding or decoding is to be done
 		private MonoCipher mcipher;
 		private VCipher vcipher;
-		private String key;
+		private String key; //keyword
 		private String fileName;
 		private String core; //root file name
 		private char inputFileType; //type of input file e.g. P or C
@@ -117,14 +117,14 @@ import java.awt.*;
 		}		
 
 		public boolean isUnique(String key) {
-		     boolean[] charArray = new boolean[100]; //creates array of booleans long enough to 
+		     boolean[] charArray = new boolean[100]; 	//creates array of booleans long enough to 
 		     for (int i = 0; i < key.length(); i++) {	//accommodate letters A-Z initialised to
 		         int c = key.charAt(i);					//false
 		         if (charArray[c]) {
 		             return false;		
 		         }
-		         charArray[c] = true;	//set value to true if keyword contains letter 
-		     }							//with value corresponding to index of charArray
+		         charArray[c] = true;				//set value to true if keyword contains letter 
+		     }										//with value corresponding to index of charArray
 		     
 		     return true;
 		}
@@ -148,7 +148,7 @@ import java.awt.*;
 			
 		  else {
 			
-		    return true;  // replace with your code
+		    return true;  
 		  }
 		}
 		
@@ -163,19 +163,18 @@ import java.awt.*;
 		{
 			fileName = messageField.getText();
 			int fileNameLen = fileName.length();
-			String message = fileName.substring(0, fileNameLen-1);
+			core = fileName.substring(0, fileNameLen-1);
 			
-			char inputFileType = fileName.charAt(fileNameLen-1);
-			
-			char outputFile;
-			if (inputFileType == 'P' || inputFileType == 'C') {//validate if last character of filename is P or C
+			inputFileType = fileName.charAt(fileNameLen-1);
 				
-				switch(inputFileType) {
-				
-				case 'P': outputFileType = 'C';
-				case 'C': outputFileType = 'D';			
-				} 
+			if (inputFileType == 'P' || inputFileType == 'C') {
 			
+				if (inputFileType == 'P') {//validate if last character of filename is P or C
+				outputFileType = 'C';
+				}
+				else if (inputFileType == 'C') {
+				outputFileType = 'D';
+				}
 			}
 			else 
 			{JOptionPane.showMessageDialog(null, "Please enter a valid filename",
@@ -185,6 +184,7 @@ import java.awt.*;
 			}
 			return true;
 		}	
+
 		/** 
 		 * Reads the input text file character by character
 		 * Each character is encoded or decoded as appropriate
@@ -222,7 +222,7 @@ import java.awt.*;
 							}
 						}
 						writer.print(newLetter);
-						result[i] = newLetter;
+						result[i] = newLetter; //puts encoded or decoded letters into array
 						i++;
 					}
 				
@@ -235,8 +235,7 @@ import java.awt.*;
 					if (writer != null) {
 						writer.close();
 						}
-					} 
-					
+					} 	
 			}
 			catch (IOException ioe) {
 				JOptionPane.showMessageDialog(null, "File not found",
@@ -267,9 +266,6 @@ import java.awt.*;
 			if (reportWriter != null)	{
 				reportWriter.close();
 			}
-			}
-	
-	
-			
+			}	
 	}
 }

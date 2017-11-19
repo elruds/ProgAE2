@@ -95,7 +95,7 @@ public class LetterFrequencies
 		report = "LETTER ANALYSIS\n";
 		report += String.format("%-5s %-5s %-5s %-5s %-5s\n", "Letter", "Freq", "Freq%", "AvgFreq%", "Diff");
 		for (int i = 0; i < SIZE; i++) {
-			report += String.format("   %-3s %-5s %5.1f %5s %5.1f\n", alphabet[i], alphaCounts[i], alphaPC[i], avgCounts[i], alphaPCDiff[i]);
+			report += String.format("   %-3s %-4s %5.1f %5s %7.1f\n", alphabet[i], alphaCounts[i], alphaPC[i], avgCounts[i], alphaPCDiff[i]);
 		}
 		report += String.format("The most frequent letter is %s at %.2f%s", maxCh, maxPC, "%");
 		
