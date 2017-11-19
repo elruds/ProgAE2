@@ -25,6 +25,9 @@ import java.awt.*;
 		private VCipher vcipher;
 		private String key;
 		private String fileName;
+		private String core; //root file name
+		private char inputFileType; //type of input file e.g. P or C
+		private char outputFileType; //type of output file e.g. C or D
 		
 		/**
 		 * The constructor adds all the components to the frame
@@ -86,25 +89,33 @@ import java.awt.*;
 			if (getKeyword() && processFileName()) {
 			
 			if (e.getSource() == monoButton) {
-				char[] encryption;
-				char[] decryption;
 				mcipher = new MonoCipher(key);
-				encryption = processFile(false, fileName + ".txt", "text1C.txt", true);
-				LetterFrequencies encryptionF = new LetterFrequencies(encryption, mcipher.getAlphabet());
-				String report = encryptionF.getReport();
-				decryption = processFile(false, "text1C.txt", "text1D.txt", false);
-				LetterFrequencies decryptionF = new LetterFrequencies(decryption, mcipher.getAlphabet());
-				
+				encryptionOrDecryptionProcess();
 			}	
-			
-			else if (e.getSource() == vigenereButton) {
-				vcipher = new VCipher(key);
-
+				else if (e.getSource() == vigenereButton) {
+					vcipher = new VCipher(key);
 				}
 			}
-		}	
-		
-		
+		}
+		public void encryptionOrDecryptionProcess() {
+			
+			if (inputFileType == 'P')	{
+				char[] encryption;
+				encryption = processFile(false, core + inputFileType + ".txt", core + outputFileType + ".txt", true);
+				LetterFrequencies encryptionF = new LetterFrequencies(encryption, mcipher.getAlphabet());
+				printReport(encryptionF);
+		}
+				
+			else if (inputFileType == 'C')	{
+				char[] decryption;
+				decryption = processFile(false, core + inputFileType + ".txt", core + outputFileType + ".txt", false);
+				LetterFrequencies decryptionF = new LetterFrequencies(decryption, mcipher.getAlphabet());
+				printReport(decryptionF);
+			
+			}	
+			
+		}		
+
 		public boolean isUnique(String key) {
 		     boolean[] charArray = new boolean[100]; //creates array of booleans long enough to 
 		     for (int i = 0; i < key.length(); i++) {	//accommodate letters A-Z initialised to
@@ -118,14 +129,6 @@ import java.awt.*;
 		     return true;
 		}
 		
-//		public int[] getFrequency(String input) {
-//		     int[] charArray = new int[100];
-//		     for (int i = 0; i < input.length(); i++) {
-//		         int c = input.charAt(i);
-//		         charArray[c] += 1;
-//		     }
-//		     return charArray;
-//		}
 		
 		/** 
 		 * Obtains cipher keyword
@@ -160,11 +163,19 @@ import java.awt.*;
 		{
 			fileName = messageField.getText();
 			int fileNameLen = fileName.length();
+			String message = fileName.substring(0, fileNameLen-1);
 			
-			if (fileName.charAt(fileNameLen-1) == 'P' || (fileName.charAt(fileNameLen-1) == 'C' )) {
+			char inputFileType = fileName.charAt(fileNameLen-1);
+			
+			char outputFile;
+			if (inputFileType == 'P' || inputFileType == 'C') {//validate if last character of filename is P or C
 				
-				 return true; 			//validate if last character of filename is P or C
-				 
+				switch(inputFileType) {
+				
+				case 'P': outputFileType = 'C';
+				case 'C': outputFileType = 'D';			
+				} 
+			
 			}
 			else 
 			{JOptionPane.showMessageDialog(null, "Please enter a valid filename",
@@ -172,13 +183,8 @@ import java.awt.*;
 			messageField.setText("");
 			return false;
 			}
-		}
-
-		
-				
-		    // replace with your code
-
-		
+			return true;
+		}	
 		/** 
 		 * Reads the input text file character by character
 		 * Each character is encoded or decoded as appropriate
@@ -243,7 +249,27 @@ import java.awt.*;
 			}
 			return result;
 	}
-
-
-		
+	
+		private 	void printReport(LetterFrequencies encryptOrDecrypt)	
+		{	
+			PrintWriter reportWriter = null;
+			
+			try {
+				reportWriter = new PrintWriter(core + "F.txt");
+				reportWriter.write(encryptOrDecrypt.getReport());
+				
+			}	 catch (FileNotFoundException e) {
+				 JOptionPane.showMessageDialog(null, "File not found",
+							"Error", JOptionPane.ERROR_MESSAGE);
+					messageField.setText("");
+			}
+			finally	{
+			if (reportWriter != null)	{
+				reportWriter.close();
+			}
+			}
+	
+	
+			
 	}
+}
