@@ -113,7 +113,7 @@ import java.awt.*;
 				printReport(decryptionF);
 			
 			}	
-			
+			System.exit(0); //terminate program after encryption or decryption
 		}		
 
 		public boolean isUnique(String key) {
@@ -225,7 +225,7 @@ import java.awt.*;
 						result[i] = newLetter; //puts encoded or decoded letters into array
 						i++;
 					}
-				
+		
 					}
 					finally {
 						
